@@ -2,10 +2,12 @@ FROM golang:1.25
 
 WORKDIR /app
 
-COPY backend/go.mod backend/go.sum ./
+COPY backend/go.mod ./
 RUN go mod download
 
 COPY backend/*.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+RUN go build -o /srv/www/backend
 
-CMD ["/docker-gs-ping"]
+WORKDIR /srv/www
+
+CMD ["./backend"]
