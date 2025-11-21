@@ -3,3 +3,21 @@ services:
     build: .
     ports:
       - 80:8080
+    networks:
+      - db-network
+
+  db:
+    image: postgres
+    env_file:
+      - .env
+    networks:
+      - db-network
+    volumes:
+      - ./sql/postgres_data:/var/lib/postgresql
+      - ./sql/init:/docker-entrypoint-initdb.d/
+    restart: unless-stopped
+
+
+networks: 
+  db-network:
+    driver: bridge
