@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"strings"
+	"time"
 )
 
 func ajoutForm(w http.ResponseWriter, r *http.Request)  {
@@ -132,12 +133,25 @@ func ajoutForm(w http.ResponseWriter, r *http.Request)  {
         return
     }
 
-    // Téléphone (optionnel)
+    // Téléphone (obligatoire)
     if telephone, ok := data["telephone"].(string); ok && telephone != "" {
         f.Telephone = strings.TrimSpace(telephone)
-        if len(f.Telephone) < 10 {
+		if f.Telephone == "" {
+			http.Error(w, "Le numéro de télephone est obligatoire", http.StatusBadRequest)
+            return
+		} else if len(f.Telephone) < 10 {
             http.Error(w, "Numéro de téléphone invalide", http.StatusBadRequest)
             return
         }
     }
+
+	// Enregistrer dans la DB
+
+	// Reponse
+	w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    json.NewEncoder(w).Encode(map[string]interface{}{
+        "message": "Formulaire enregistré avec succès",
+        "id": f.Id,
+    })
 }
