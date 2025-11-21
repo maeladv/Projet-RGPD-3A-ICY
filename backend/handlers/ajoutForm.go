@@ -63,6 +63,18 @@ func ajoutForm(w http.ResponseWriter, r *http.Request)  {
         return
     }
 
+	// Ville (Obligatoire)
+	if ville_naissance, ok := data["ville_naissance"].(string); ok {
+        f.Ville_naissance = strings.TrimSpace(ville_naissance)
+        if f.Ville_naissance == "" {
+            http.Error(w, "La ville de naissance est obligatoire", http.StatusBadRequest)
+            return
+        }
+    } else {
+        http.Error(w, "La ville de naissance est obligatoire", http.StatusBadRequest)
+        return
+    }
+
     // Niveau de diplôme (obligatoire)
     if niveau, ok := data["niveau_diplome"].(string); ok {
         f.Niveau_diplome = strings.TrimSpace(niveau)
@@ -101,6 +113,18 @@ func ajoutForm(w http.ResponseWriter, r *http.Request)  {
         }
     } else {
         http.Error(w, "Le code postal est obligatoire", http.StatusBadRequest)
+        return
+    }
+
+	// Ville (Obligatoire)
+	if ville, ok := data["ville"].(string); ok {
+        f.Ville = strings.TrimSpace(ville)
+        if f.Ville == "" {
+            http.Error(w, "La ville est obligatoire", http.StatusBadRequest)
+            return
+        }
+    } else {
+        http.Error(w, "La ville est obligatoire", http.StatusBadRequest)
         return
     }
 
