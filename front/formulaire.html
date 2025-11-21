@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire RGPD</title>
+    <style>
+        :root {
+            --deep-blue: #0b1f4b;
+            --sky-blue: #2a7fe0;
+            --lavender: #7c6ef4;
+            --peach: #fcbf49;
+            --cream: #f5f3ff;
+            --card: rgba(255, 255, 255, 0.95);
+            --text: #0c172a;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: radial-gradient(circle at top right, var(--lavender), transparent 40%),
+                        radial-gradient(circle at bottom left, var(--sky-blue), transparent 35%),
+                        linear-gradient(135deg, var(--deep-blue), #3b4ac2 70%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 16px;
+        }
+        main {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .site-header {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--cream);
+            font-weight: 600;
+        }
+        .site-header .brand {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+        .site-header nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: background 0.2s ease;
+        }
+        .site-header nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .site-footer {
+            width: 100%;
+            max-width: 1100px;
+            margin: 24px auto 0;
+            padding-top: 12px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+        .site-footer .credit {
+            margin-top: 6px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+        }
+        .site-footer .credit-link {
+            color: #ffd86b;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .site-footer .credit-link:hover {
+            text-decoration: underline;
+        }
+        .site-footer .pseudo {
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .card {
+            width: min(960px, 100%);
+            background: var(--card);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 30px 80px rgba(11, 17, 44, 0.35);
+            border: 1px solid rgba(11, 17, 44, 0.08);
+        }
+        h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #1b1f3b;
+        }
+        p.lead {
+            margin: 6px 0 22px;
+            color: rgba(27, 31, 59, 0.65);
+        }
+        form {
+            display: grid;
+            gap: 18px;
+        }
+        .grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(11, 17, 44, 0.75);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .req {
+            color: #f95656;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid rgba(11, 17, 44, 0.12);
+            padding: 12px 14px;
+            font-size: 15px;
+            background: #fff;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--sky-blue);
+            box-shadow: 0 8px 24px rgba(42, 127, 224, 0.25);
+        }
+        select {
+            appearance: none;
+            background: url('data:image/svg+xml;charset=US-ASCII,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 5"%3e%3cpath d="M0 0l4 5 4-5" fill="none" stroke="%233b4ac2"/%3e%3c/svg%3e') right 14px center/10px no-repeat;
+        }
+        .cv-field {
+            border-radius: 14px;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(252, 191, 73, 0.12), rgba(44, 63, 255, 0.14));
+            border: 1px solid rgba(11, 17, 44, 0.12);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+        }
+        .file-control {
+            position: relative;
+            border: 2px dashed rgba(11, 17, 44, 0.25);
+            border-radius: 12px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .file-control input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-button {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--peach), #ff7a59);
+            color: #16173a;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(255, 126, 73, 0.3);
+        }
+        .file-name {
+            font-size: 14px;
+            color: rgba(11, 17, 44, 0.7);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .note {
+            font-size: 12px;
+            color: rgba(11, 17, 44, 0.55);
+            margin-top: 6px;
+        }
+        .error-message {
+            font-size: 12px;
+            color: #d93025;
+            min-height: 18px;
+        }
+        input.input-error,
+        select.input-error,
+        textarea.input-error {
+            border-color: #f95656;
+            box-shadow: 0 0 0 3px rgba(249, 86, 86, 0.2);
+        }
+        .field-error .file-control {
+            border-color: #f95656;
+            box-shadow: inset 0 0 0 2px rgba(249, 86, 86, 0.25);
+        }
+        .consent-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: rgba(11, 17, 44, 0.8);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(11, 17, 44, 0.12);
+            background: rgba(252, 191, 73, 0.08);
+        }
+        .consent-container input {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(11, 17, 44, 0.5);
+            accent-color: var(--sky-blue);
+        }
+        .actions {
+            display: flex;
+            gap: 14px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .button {
+            padding: 14px 22px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .button.primary {
+            background: linear-gradient(135deg, var(--peach), #ff7a59);
+            color: #16173a;
+            box-shadow: 0 15px 35px rgba(255, 126, 73, 0.35);
+        }
+        .button.secondary {
+            background: transparent;
+            border: 1px solid rgba(11, 17, 44, 0.2);
+            color: rgba(11, 17, 44, 0.8);
+        }
+        .hero {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .hero-illustration {
+            width: 72px;
+            height: 72px;
+            border-radius: 24px;
+            background: radial-gradient(circle, rgba(252, 191, 73, 0.8), rgba(255, 255, 255, 0))
+                padding-box padding-box;
+            box-shadow: 0 20px 45px rgba(252, 191, 73, 0.35);
+            position: relative;
+        }
+        .hero-illustration::after {
+            content: '';
+            position: absolute;
+            inset: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff7a59, #ffd86b);
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .hero-tags span {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(11, 17, 44, 0.08);
+            color: rgba(11, 17, 44, 0.8);
+        }
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        .post-form {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .info-card {
+            padding: 18px 22px;
+            border-radius: 16px;
+            background: rgba(44, 63, 255, 0.08);
+            border: 1px solid rgba(44, 63, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(11, 17, 44, 0.15);
+        }
+        .info-card h3 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            color: #16173a;
+        }
+        .info-card p {
+            margin: 0;
+            color: rgba(11, 17, 44, 0.75);
+            font-size: 14px;
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand">Medicaire</div>
+        <nav>
+            <a href="/admin">Connexion / Admin</a>
+        </nav>
+    </header>
+    <main>
+        <section class="card">
+        <header class="hero">
+            <div class="hero-illustration" aria-hidden="true"></div>
+            <div>
+                <h1>Rejoignez notre équipe</h1>
+                <p class="lead">Déposez votre CV en toute sécurité pour intégrer nos prochaines campagnes de recrutement. Les champs marqués d'une astérisque sont obligatoires.</p>
+                <div class="hero-tags">
+                    <span>Onboarding rapide</span>
+                    <span>Feedback sous 7 jours</span>
+                    <span>Processus 100 % RGPD</span>
+                </div>
+            </div>
+        </header>
+        <form id="rgpdForm" action="/submit.php" method="POST" enctype="multipart/form-data" accept-charset="UTF-8" novalidate>
+            <div class="grid">
+                <div>
+                    <label for="nom">Nom<span class="req">*</span></label>
+                    <input type="text" id="nom" name="nom" required aria-required="true" aria-describedby="nom-error">
+                    <span class="error-message" id="nom-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="prenom">Prénom<span class="req">*</span></label>
+                    <input type="text" id="prenom" name="prenom" required aria-required="true" aria-describedby="prenom-error">
+                    <span class="error-message" id="prenom-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="date_naissance">Date de naissance<span class="req">*</span></label>
+                    <input type="date" id="date_naissance" name="date_naissance" required aria-required="true" aria-describedby="date_naissance-error">
+                    <span class="error-message" id="date_naissance-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="lieu_naissance">Lieu de naissance<span class="req">*</span></label>
+                    <input type="text" id="lieu_naissance" name="lieu_naissance" required aria-required="true" aria-describedby="lieu_naissance-error">
+                    <span class="error-message" id="lieu_naissance-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="diplome">Niveau de diplôme<span class="req">*</span></label>
+                    <select id="diplome" name="diplome" required aria-required="true" aria-describedby="diplome-error">
+                        <option value="">Sélectionnez</option>
+                        <option value="bac">Bac</option>
+                        <option value="bac+2">Bac+2</option>
+                        <option value="bac+3">Bac+3</option>
+                        <option value="master">Master</option>
+                        <option value="doctorat">Doctorat</option>
+                    </select>
+                    <span class="error-message" id="diplome-error" aria-live="polite"></span>
+                </div>
+            </div>
+            <div class="grid">
+                <div style="grid-column: span 2;">
+                    <label for="adresse_ligne1">Adresse (ligne 1)<span class="req">*</span></label>
+                    <input type="text" id="adresse_ligne1" name="adresse_ligne1" required aria-required="true" aria-describedby="adresse_ligne1-error">
+                    <span class="error-message" id="adresse_ligne1-error" aria-live="polite"></span>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label for="adresse_ligne2">Complément d'adresse</label>
+                    <input type="text" id="adresse_ligne2" name="adresse_ligne2" aria-describedby="adresse_ligne2-error">
+                    <span class="error-message" id="adresse_ligne2-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="code_postal">Code postal<span class="req">*</span></label>
+                    <input type="text" id="code_postal" name="code_postal" pattern="\d{5}" title="Code postal sur 5 chiffres" required aria-required="true" aria-describedby="code_postal-error">
+                    <span class="error-message" id="code_postal-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="ville">Ville<span class="req">*</span></label>
+                    <input type="text" id="ville" name="ville" required aria-required="true" aria-describedby="ville-error">
+                    <span class="error-message" id="ville-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="pays">Pays<span class="req">*</span></label>
+                    <select id="pays" name="pays" required aria-required="true" aria-describedby="pays-error">
+                        <option value="">Sélectionnez</option>
+                        <option value="FR">France</option>
+                        <option value="BE">Belgique</option>
+                        <option value="CH">Suisse</option>
+                        <option value="LU">Luxembourg</option>
+                        <option value="OTHER">Autre</option>
+                    </select>
+                    <span class="error-message" id="pays-error" aria-live="polite"></span>
+                </div>
+            </div>
+            <div class="grid">
+                <div>
+                    <label for="email">Adresse mail<span class="req">*</span></label>
+                    <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-error">
+                    <span class="error-message" id="email-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="securite_sociale">Numéro de sécurité sociale<span class="req">*</span></label>
+                    <input type="text" id="securite_sociale" name="securite_sociale" pattern="\d{15}" title="15 chiffres" required aria-required="true" aria-describedby="securite_sociale-error">
+                    <span class="error-message" id="securite_sociale-error" aria-live="polite"></span>
+                </div>
+                <div>
+                    <label for="telephone">Téléphone<span class="req">*</span></label>
+                    <input type="tel" id="telephone" name="telephone" pattern="\d{10}" title="10 chiffres" required aria-required="true" aria-describedby="telephone-error">
+                    <span class="error-message" id="telephone-error" aria-live="polite"></span>
+                </div>
+            </div>
+            <div class="cv-field">
+                <label for="cv">CV (PDF uniquement, max 2 Mo)</label>
+                <div class="file-control">
+                    <input type="file" id="cv" name="cv" accept="application/pdf" aria-describedby="cv-error">
+                    <span class="file-button">Choisir un fichier</span>
+                    <span class="file-name" aria-live="polite">Aucun fichier sélectionné</span>
+                </div>
+                <p class="note">Contrôler MIME + stockage hors webroot côté serveur.</p>
+                <span class="error-message" id="cv-error" aria-live="polite"></span>
+            </div>
+            <div class="consent-container">
+                <input type="checkbox" id="consent" name="consent" required aria-required="true" aria-describedby="consent-error">
+                <label for="consent">J'accepte que mes données soient utilisées dans le cadre du recrutement et de la conformité RGPD.</label>
+            </div>
+            <span class="error-message" id="consent-error" aria-live="polite"></span>
+            <div class="actions">
+                <button type="reset" class="button secondary">Réinitialiser</button>
+                <button type="submit" class="button primary">Envoyer</button>
+            </div>
+        </form>
+        <div class="post-form">
+            <div class="info-card">
+                <h3>Ce qui se passe après</h3>
+                <p>Nous relisons chaque dossier sous 7 jours, puis nous contactons les talents qui correspondent au profil demandé.</p>
+            </div>
+            <div class="info-card">
+                <h3>Sécurité des données</h3>
+                <p>Les CV sont stockés hors du webroot, chiffrés au repos et accessibles uniquement par l’équipe RH.</p>
+            </div>
+        </div>
+    </section>
+    </main>
+    <footer class="site-footer">
+        <p>© 2025 Medicaire. Données collectées pour la candidature en respect du RGPD.</p>
+        <p class="credit">Projet RGPD Ingénieur en Informatique et Cybersécurité à l'INSA Hauts-de-France (3e année) – <a class="credit-link" href="https://github.com/maeladv" target="_blank" rel="noreferrer">Advisse Mael</a>, <a class="credit-link" href="https://github.com/BillyTheSecond" target="_blank" rel="noreferrer">Bednarowicz Louison</a> et <a class="credit-link" href="https://github.com/prismey" target="_blank" rel="noreferrer">Ambre Petit</a>.</p>
+    </footer>
+    <script>
+        (function(){
+            const form = document.getElementById('rgpdForm');
+            const cvInput = document.getElementById('cv');
+            const fileNameLabel = document.querySelector('.file-name');
+            const consentCheckbox = document.getElementById('consent');
+
+            function clearErrors(){
+                document.querySelectorAll('.error-message').forEach(node => node.textContent = '');
+                document.querySelectorAll('.input-error').forEach(node => node.classList.remove('input-error'));
+                document.querySelectorAll('.field-error').forEach(node => node.classList.remove('field-error'));
+                document.querySelectorAll('[aria-invalid="true"]').forEach(node => node.removeAttribute('aria-invalid'));
+            }
+
+            function setFieldError(field, message){
+                const errorId = field.getAttribute('id');
+                if (errorId){
+                    const errorElement = document.getElementById(`${errorId}-error`);
+                    if (errorElement){
+                        errorElement.textContent = message;
+                    }
+                }
+                field.classList.add('input-error');
+                field.setAttribute('aria-invalid', 'true');
+                if (field.type === 'file'){
+                    field.closest('.cv-field')?.classList.add('field-error');
+                }
+            }
+
+            function focusField(field){
+                if (field && typeof field.focus === 'function'){
+                    field.focus();
+                }
+            }
+
+            form.addEventListener('submit', function(event){
+                clearErrors();
+
+                if (!consentCheckbox.checked){
+                    setFieldError(consentCheckbox, 'Vous devez accepter le traitement de vos données pour postuler.');
+                    focusField(consentCheckbox);
+                    event.preventDefault();
+                    return;
+                }
+
+                if (!form.checkValidity()){
+                    const firstInvalid = form.querySelector(':invalid');
+                    if (firstInvalid){
+                        setFieldError(firstInvalid, firstInvalid.validationMessage || 'Ce champ est requis.');
+                        focusField(firstInvalid);
+                    }
+                    event.preventDefault();
+                    return;
+                }
+
+                const ssnField = document.getElementById('securite_sociale');
+                const ssn = ssnField.value.trim();
+                if (!/^\d{15}$/.test(ssn)){
+                    setFieldError(ssnField, 'Le numéro de sécurité sociale doit contenir 15 chiffres.');
+                    event.preventDefault();
+                    return;
+                }
+
+                const phoneField = document.getElementById('telephone');
+                const phone = phoneField.value.trim();
+                if (!/^\d{10}$/.test(phone)){
+                    setFieldError(phoneField, 'Le téléphone doit contenir 10 chiffres.');
+                    event.preventDefault();
+                    return;
+                }
+
+                const postalField = document.getElementById('code_postal');
+                const postal = postalField.value.trim();
+                if (!/^\d{5}$/.test(postal)){
+                    setFieldError(postalField, 'Le code postal doit être sur 5 chiffres.');
+                    event.preventDefault();
+                    return;
+                }
+
+                if (cvInput.files.length > 0){
+                    const file = cvInput.files[0];
+                    if (file.size > 2 * 1024 * 1024){
+                        setFieldError(cvInput, 'Le CV doit peser au maximum 2 Mo.');
+                        event.preventDefault();
+                        return;
+                    }
+                    if (file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)){
+                        setFieldError(cvInput, 'Le CV doit être un fichier PDF.');
+                        event.preventDefault();
+                        return;
+                    }
+                }
+            });
+
+            cvInput.addEventListener('change', function(){
+                const errorElement = document.getElementById('cv-error');
+                if (cvInput.files.length === 0){
+                    fileNameLabel.textContent = 'Aucun fichier sélectionné';
+                    if (errorElement){
+                        errorElement.textContent = '';
+                    }
+                } else {
+                    fileNameLabel.textContent = cvInput.files[0].name;
+                    if (errorElement){
+                        errorElement.textContent = '';
+                    }
+                }
+                cvInput.classList.remove('input-error');
+                cvInput.closest('.cv-field')?.classList.remove('field-error');
+            });
+        })();
+    </script>
+</body>
+</html>
