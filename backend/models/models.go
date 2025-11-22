@@ -12,7 +12,7 @@ type Form struct {
 	// Addresse
 	Adresse string
 	Complement string
-	Code_postal int
+	Code_postal string
 	Ville string
 	Pays string
 	Num_secu string
