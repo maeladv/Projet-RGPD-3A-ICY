@@ -4,8 +4,7 @@ import (
 	"backend/models"
     "database/sql"
     "encoding/json"
-    "net/http"  
-    _ "github.com/lib/pq"
+    "net/http"
 )
 
 func GetForm(db *sql.DB) http.HandlerFunc {
