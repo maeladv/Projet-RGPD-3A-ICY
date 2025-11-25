@@ -107,7 +107,7 @@ func ajoutForm(w http.ResponseWriter, r *http.Request)  {
     // Code postal (obligatoire)
     if codePostal, ok := data["code_postal"].(string); ok {
         f.Code_postal = strings.TrimSpace(codePostal)
-        if f.Code_postal <= "" {
+        if f.Code_postal == "" {
             http.Error(w, "Code postal invalide", http.StatusBadRequest)
             return
         }
