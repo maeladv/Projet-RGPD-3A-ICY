@@ -5,46 +5,53 @@ import (
     "fmt"
     "log"
     "os"
+    "time"
     
-    "github.com/joho/godotenv"
     _ "github.com/lib/pq"
 )
 
 var DB *sql.DB
 
 func InitDB() (*sql.DB, error) {
-    // Charger le fichier .env
-    err := godotenv.Load()
-    if err != nil {
-        log.Println("Erreur lors du chargement du fichier .env, utilisation des variables d'environnement système")
-    }
-
-	pass := os.Getenv("POSTGRES_PASSWORD")
-	host := "postgres"
-	port := "5432"
-	user := "postgres"
-	dbname := "postgres"
-	sslmode := "disable"
-	
-	// Construire la chaîne de connexion
+    pass := os.Getenv("POSTGRES_PASSWORD")
+    host := "db"  // Nom du service dans compose.yml
+    port := "5432"
+    user := "postgres"
+    dbname := "postgres"
+    sslmode := "disable"
+    
+    log.Printf("Tentative de connexion à PostgreSQL: host=%s port=%s user=%s dbname=%s", host, port, user, dbname)
+    
+    // Construire la chaîne de connexion
     psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
         host, port, user, pass, dbname, sslmode)
     
-    // Ouvrir la connexion
-    db, err := sql.Open("postgres", psqlInfo)
-    if err != nil {
-        return nil, fmt.Errorf("erreur lors de l'ouverture de la connexion: %v", err)
+    var db *sql.DB
+    var err error
+    
+    // Retry logic - attendre que PostgreSQL soit prêt
+    maxRetries := 10
+    for i := 0; i < maxRetries; i++ {
+        db, err = sql.Open("postgres", psqlInfo)
+        if err != nil {
+            log.Printf("Tentative %d/%d: erreur lors de l'ouverture: %v", i+1, maxRetries, err)
+            time.Sleep(2 * time.Second)
+            continue
+        }
+        
+        err = db.Ping()
+        if err == nil {
+            log.Println("✓ Connexion à la base de données réussie!")
+            DB = db
+            return db, nil
+        }
+        
+        log.Printf("Tentative %d/%d: erreur ping: %v", i+1, maxRetries, err)
+        db.Close()
+        time.Sleep(2 * time.Second)
     }
     
-    // Vérifier la connexion
-    err = db.Ping()
-    if err != nil {
-        return nil, fmt.Errorf("erreur lors du ping de la base de données: %v", err)
-    }
-    
-    log.Println("Connexion à la base de données réussie!")
-    DB = db
-    return db, nil
+    return nil, fmt.Errorf("impossible de se connecter après %d tentatives: %v", maxRetries, err)
 }
 
 func CloseDB() {
