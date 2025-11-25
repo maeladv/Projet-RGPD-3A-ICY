@@ -18,6 +18,7 @@ func main() {
     // Configurer vos routes
     http.HandleFunc("/api/forms", handlers.GetAllForms(database))
     http.HandleFunc("/api/form", handlers.GetForm(database))
+	http.HandleFunc("/api/form/add", handlers.AjoutForm(database))
     
     // Démarrer le serveur
     log.Println("Serveur démarré sur le port 8080")

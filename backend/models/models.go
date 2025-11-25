@@ -9,6 +9,7 @@ type Form struct {
 	Date_naissance time.Time
 	Ville_naissance string
 	Niveau_diplome string
+	Mail string
 	// Addresse
 	Adresse string
 	Complement string
