@@ -66,6 +66,15 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
             return
         }
 
+        http.SetCookie(w, &http.Cookie{
+            Name:     "jwt",
+            Value:    token,
+            Path:     "/",
+            HttpOnly: true,
+            Secure:   false, // mets true si HTTPS
+            SameSite: http.SameSiteLaxMode,
+        })
+
         w.Header().Set("Content-Type", "application/json")
         json.NewEncoder(w).Encode(loginResponse{Token: token, User: u})
     }
