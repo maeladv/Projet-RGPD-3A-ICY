@@ -1,22 +1,22 @@
 package models
 
-import("time")
+import (
+	"time"
+)
 
 type Form struct {
-	Id int
-	Nom string
-	Prenom string
-	Date_naissance time.Time
-	Ville_naissance string
-	Niveau_diplome string
-	Mail string
-	// Addresse
-	Adresse string
-	Complement string
-	Code_postal string
-	Ville string
-	Pays string
-	Num_secu string
-	Telephone string
+	ID             int
+	Nom            string
+	Prenom         string
+	DateNaissance  time.Time
+	VilleNaissance string
+	NiveauDiplome  string
+	Mail           string
+	Adresse        string
+	Complement     string
+	CodePostal     string
+	Ville          string
+	Pays           string
+	NumSecu        string
+	Telephone      string
 }
-
