@@ -4,15 +4,18 @@ services:
     ports:
       - 80:8080
     env_file:
-      - .env
+      - .env-db
+      - .env-sftp
     networks:
       - db-network
     depends_on:
       - db
+      - sftp
+
   db:
-    image: postgres
+    image: postgres:18-alpine
     env_file:
-      - .env
+      - .env-db
     networks:
       - db-network
     volumes:
@@ -20,7 +23,18 @@ services:
       - ./sql/init:/docker-entrypoint-initdb.d/
     restart: unless-stopped
 
+  sftp:
+    image: atmoz/sftp
+    networks:
+        - sftp-network
+    env_file:
+      - .env-sftp
+    volumes:
+      - ./sftp/:/uploads
+    restart: unless-stopped
 
 networks: 
   db-network:
+    driver: bridge
+  sftp-network:
     driver: bridge
