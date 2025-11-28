@@ -17,6 +17,9 @@ func main() {
 	http.HandleFunc("/api/forms", handlers.GetAllForms(database))
 	http.HandleFunc("/api/form", handlers.GetForm(database))
 	http.HandleFunc("/api/form/add", handlers.AjoutForm(database))
+	http.HandleFunc("/api/user/add", handlers.AjoutUser(database))
+
+	http.HandleFunc("/api/users", handlers.GetAllUsersHandler(database))
 
 	log.Println("[i] Serveur démarré sur le port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
