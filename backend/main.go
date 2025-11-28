@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/api/form", handlers.GetForm(database))
 	http.HandleFunc("/api/form/add", handlers.AjoutForm(database))
 	http.HandleFunc("/api/user/add", handlers.AjoutUser(database))
+	http.HandleFunc("/api/login", handlers.LoginHandler(database))
 
 	http.HandleFunc("/api/users", handlers.GetAllUsersHandler(database))
 
