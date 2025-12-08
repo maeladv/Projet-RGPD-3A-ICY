@@ -16,16 +16,18 @@ const path = require("path");
 
 // #####  ROUTES ET REQUETES  #####
 
+app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/script', express.static(path.join(__dirname, 'script')));
+
 // req et res correspondent à la requête et la réponse HTTP
 
-//  Page d'affichage des scores
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/static/pages/formulaire.html'));
 });
 
 // css files
-app.get('/css/scores.css', (req, res) => {
-    res.sendFile(path.join(__dirname, '/static/scores.css'))
+app.get('/css/style.css', (req, res) => {
+    res.sendFile(path.join(__dirname, '/static/css/style.css'))
 })
 
 // Polices d'écriture : tous les fichiers du dossier font sont publics
@@ -43,7 +45,7 @@ app.get('/fonts/:file', (req, res) => {
 // images
 app.get('/images/:file', (req, res) => {
     const fileName = req.params.file;
-    const filePath = path.join(__dirname, 'static/img', fileName)
+    const filePath = path.join(__dirname, 'static/images', fileName)
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);
     } else {

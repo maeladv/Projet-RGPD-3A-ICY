@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RH - Consultation des formulaires</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Espace RH - Consultation des réponses</h1>
+        <button id="logoutBtn">Déconnexion</button>
+    </header>
+
+    <main>
+        <section id="filters">
+            <h2>Filtres</h2>
+            <input type="text" id="searchName" placeholder="Rechercher par nom...">
+            <input type="text" id="searchEmail" placeholder="Rechercher par email...">
+            <button id="applyFilters">Appliquer</button>
+            <button id="resetFilters">Réinitialiser</button>
+        </section>
+
+        <section id="formsList">
+            <h2>Liste des formulaires</h2>
+            <div id="loading">Chargement...</div>
+            <div id="error" style="display:none; color:red;"></div>
+            
+            <table id="formsTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Date de naissance</th>
+                        <th>Niveau diplôme</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="formsBody">
+                </tbody>
+            </table>
+        </section>
+
+        <section id="formDetail" style="display:none;">
+            <h2>Détails du formulaire</h2>
+            <button id="closeDetail">Fermer</button>
+            <div id="detailContent"></div>
+        </section>
+    </main>
+
+    <script src="/script/rh/rh.js"></script>
+</body>
+</html>
