@@ -5,6 +5,10 @@ let filteredForms = [];
 
 // Vérification de l'authentification au chargement
 document.addEventListener('DOMContentLoaded', () => {
+    if (!getCookie('jwt')) {
+        window.location.href = '/login';
+        return;
+    }
     loadForms();
     setupEventListeners();
 });

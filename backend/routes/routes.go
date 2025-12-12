@@ -24,10 +24,4 @@ func SetupRoutes(database *sql.DB) {
     // Routes publiques (pas de JWT)
     http.HandleFunc("/api/user/add", handlers.AjoutUser(database))
     http.HandleFunc("/api/login", handlers.LoginHandler(database))
-    http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, "front/static/pages/login.html")
-    })
-    http.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, "front/static/pages/signup.html")
-    })
 }
