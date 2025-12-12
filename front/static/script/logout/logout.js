@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = '/login';
         } else {
             console.error('Logout failed');
-            window.location.href = '/login';
+            window.location.href = '/gestion';
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        window.location.href = '/login';
+        window.location.href = '/gestion';
     });
 });
