@@ -8,17 +8,22 @@ import (
 )
 
 func SetupRoutes(database *sql.DB) {
-	// Route de redirection intelligente pour les portails RH et admin
-	http.HandleFunc("/gestion", middleware.RequireJWT(database, func(w http.ResponseWriter, r *http.Request) {
-		claims := middleware.GetClaims(r)
-		if claims.Role == "admin" {
-			http.ServeFile(w, r, "/usr/share/nginx/html/pages/admin.html")
-		} else if claims.Role == "rh"{
-			http.ServeFile(w, r, "/usr/share/nginx/html/pages/rh.html")
-		} else {
+    // Route de redirection intelligente pour les portails RH et admin
+    http.HandleFunc("/gestion", middleware.RequireJWT(database, func(w http.ResponseWriter, r *http.Request) {
+        // Empêcher le cache du navigateur pour cette route
+        w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate") // pour forcer le navigateur à recharger la page à chaque fois
+        w.Header().Set("Pragma", "no-cache")
+        w.Header().Set("Expires", "0")
+
+        claims := middleware.GetClaims(r)
+        if claims.Role == "admin" {
+            http.ServeFile(w, r, "/usr/share/nginx/html/pages/admin.html")
+        } else if claims.Role == "rh"{
+            http.ServeFile(w, r, "/usr/share/nginx/html/pages/rh.html")
+        } else {
             http.Error(w, "Accès refusé", http.StatusForbidden)
         }
-	}))
+    }))
     
     //  Routes API
     http.HandleFunc("/api/forms", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.GetAllForms(database)))
