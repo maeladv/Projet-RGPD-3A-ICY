@@ -10,8 +10,6 @@ services:
       - front-network
     depends_on:
       - db
-    volumes:
-      - ./front/static/pages:/srv/www/front/static/pages
   db:
     image: postgres
     env_file:
