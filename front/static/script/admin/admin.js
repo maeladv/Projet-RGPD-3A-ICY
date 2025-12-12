@@ -95,6 +95,28 @@ function showNotification(message, type = "info") {
     setTimeout(() => { notif.style.display = 'none'; }, 4000);
 }
 
+function showConfirmDialog(message, onConfirm) {
+    const dialog = document.getElementById('confirmDialog');
+    const msg = document.getElementById('confirmDialogMessage');
+    const yesBtn = document.getElementById('confirmDialogYes');
+    const noBtn = document.getElementById('confirmDialogNo');
+    msg.textContent = message;
+    dialog.style.display = 'flex';
+
+    // Nettoie les anciens listeners
+    yesBtn.onclick = null;
+    noBtn.onclick = null;
+
+    yesBtn.onclick = () => {
+        dialog.style.display = 'none';
+        onConfirm(true);
+    };
+    noBtn.onclick = () => {
+        dialog.style.display = 'none';
+        onConfirm(false);
+    };
+}
+
 function displayForms(forms) {
     const tbody = document.getElementById('formsBody');
     tbody.innerHTML = '';
@@ -136,9 +158,9 @@ function displayForms(forms) {
     document.querySelectorAll('.deleteBtn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = e.target.dataset.id;
-            if(confirm('Êtes-vous sûr de vouloir supprimer ce formulaire ?')) {
-                deleteForm(id);
-            }
+            showConfirmDialog('Êtes-vous sûr de vouloir supprimer ce formulaire ?', (confirmed) => {
+                if (confirmed) deleteForm(id);
+            });
         });
     });
 }
