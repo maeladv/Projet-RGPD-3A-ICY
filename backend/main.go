@@ -26,17 +26,13 @@ func main() {
 	defer database.Close()
 
 	hostSFTP := "sftp"
-	portSFTP := "22"
+	portSFTP := "2222"
 	privateKey, err := loadPrivateKey("/keys/id_ed25519")
 	if err != nil {
 		log.Fatal(err)
 	}
-	hostKey, err := loadPublicKey("/keys/ssh_host_rsa_key.pub")
-	if err != nil {
-		log.Fatal(err)
-	}
-	usernameSFTP := os.Getenv("SFTP_USERNAME")
-	sftp, err := sftp.InitSFTP(hostSFTP, portSFTP, usernameSFTP, privateKey, hostKey)
+	usernameSFTP := os.Getenv("USER_NAME")
+	sftp, err := sftp.InitSFTP(hostSFTP, portSFTP, usernameSFTP, privateKey)
 	if err != nil {
 		log.Fatal(err)
 	}
