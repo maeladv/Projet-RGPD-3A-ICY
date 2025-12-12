@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupEventListeners() {
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    
     // Toggle filters
     document.getElementById('toggleFiltersBtn').addEventListener('click', () => {
         const panel = document.getElementById('advancedFilters');
@@ -330,9 +328,4 @@ async function deleteForm(id) {
 
 function closeDetail() {
     document.getElementById('formDetail').style.display = 'none';
-}
-
-function logout() {
-    document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    window.location.href = '/login.html';
 }
