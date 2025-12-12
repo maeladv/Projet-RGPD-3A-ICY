@@ -82,6 +82,19 @@ async function loadForms() {
     }
 }
 
+function showNotification(message, type = "info") {
+    const notif = document.getElementById('notification');
+    notif.textContent = message;
+    notif.style.display = 'block';
+    notif.style.background = type === "error" ? "#f8d7da" : "#d1e7dd";
+    notif.style.color = type === "error" ? "#842029" : "#0f5132";
+    notif.style.border = "1px solid " + (type === "error" ? "#f5c2c7" : "#badbcc");
+    notif.style.padding = "10px";
+    notif.style.margin = "10px 0";
+    notif.style.borderRadius = "5px";
+    setTimeout(() => { notif.style.display = 'none'; }, 4000);
+}
+
 function displayForms(forms) {
     const tbody = document.getElementById('formsBody');
     tbody.innerHTML = '';
@@ -94,17 +107,17 @@ function displayForms(forms) {
     forms.forEach(form => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${form.ID || form.id}</td>
-            <td>${form.Nom || ''}</td>
-            <td>${form.Prenom || ''}</td>
-            <td>${form.Mail || ''}</td>
-            <td>${form.Telephone || ''}</td>
-            <td>${formatDate(form.DateNaissance)}</td>
-            <td>${form.NiveauDiplome || ''}</td>
+            <td>${form.id}</td>
+            <td>${form.nom || ''}</td>
+            <td>${form.prenom || ''}</td>
+            <td>${form.mail || ''}</td>
+            <td>${form.num_telephone || ''}</td>
+            <td>${formatDate(form.date_naissance)}</td>
+            <td>${form.niveau_diplome || ''}</td>
             <td>
                 <div class="actions-cell">
-                    <button class="viewBtn" data-id="${form.ID || form.id}">Éditer</button>
-                    <button class="deleteBtn" data-id="${form.ID || form.id}">Suppr.</button>
+                    <button class="viewBtn" data-id="${form.id}">Éditer</button>
+                    <button class="deleteBtn" data-id="${form.id}">Suppr.</button>
                 </div>
             </td>
         `;
@@ -161,16 +174,16 @@ function applyFilters(globalSearchTerm = null) {
     filteredForms = allForms.filter(form => {
         // Filtre global (cherche dans tous les champs pertinents)
         const matchGlobal = !globalTerm || 
-            (form.Nom && form.Nom.toLowerCase().includes(globalTerm)) ||
-            (form.Prenom && form.Prenom.toLowerCase().includes(globalTerm)) ||
-            (form.Mail && form.Mail.toLowerCase().includes(globalTerm)) ||
-            (form.Telephone && form.Telephone.toLowerCase().includes(globalTerm));
+            (form.nom && form.nom.toLowerCase().includes(globalTerm)) ||
+            (form.prenom && form.prenom.toLowerCase().includes(globalTerm)) ||
+            (form.mail && form.mail.toLowerCase().includes(globalTerm)) ||
+            (form.num_telephone && form.num_telephone.toLowerCase().includes(globalTerm));
 
         // Filtres spécifiques
-        const matchName = !searchName || (form.Nom && form.Nom.toLowerCase().includes(searchName));
-        const matchSurname = !searchSurname || (form.Prenom && form.Prenom.toLowerCase().includes(searchSurname));
-        const matchEmail = !searchEmail || (form.Mail && form.Mail.toLowerCase().includes(searchEmail));
-        const matchPhone = !searchPhone || (form.Telephone && form.Telephone.toLowerCase().includes(searchPhone));
+        const matchName = !searchName || (form.nom && form.nom.toLowerCase().includes(searchName));
+        const matchSurname = !searchSurname || (form.prenom && form.prenom.toLowerCase().includes(searchSurname));
+        const matchEmail = !searchEmail || (form.mail && form.mail.toLowerCase().includes(searchEmail));
+        const matchPhone = !searchPhone || (form.num_telephone && form.num_telephone.toLowerCase().includes(searchPhone));
         
         return matchGlobal && matchName && matchSurname && matchEmail && matchPhone;
     });
@@ -206,59 +219,59 @@ async function showFormDetail(id) {
         
         detailContent.innerHTML = `
             <form id="editForm" onsubmit="return false;">
-                <input type="hidden" name="ID" value="${form.ID || form.id}">
+                <input type="hidden" name="id" value="${form.id}">
                 <div class="detail-grid">
                     <div class="form-group">
                         <label>Nom</label>
-                        <input type="text" name="Nom" value="${form.Nom || ''}">
+                        <input type="text" name="nom" value="${form.nom || ''}">
                     </div>
                     <div class="form-group">
                         <label>Prénom</label>
-                        <input type="text" name="Prenom" value="${form.Prenom || ''}">
+                        <input type="text" name="prenom" value="${form.prenom || ''}">
                     </div>
                     <div class="form-group">
                         <label>Date de naissance</label>
-                        <input type="date" name="DateNaissance" value="${formatDateForInput(form.DateNaissance)}">
+                        <input type="date" name="date_naissance" value="${formatDateForInput(form.date_naissance)}">
                     </div>
                     <div class="form-group">
                         <label>Ville de naissance</label>
-                        <input type="text" name="VilleNaissance" value="${form.VilleNaissance || ''}">
+                        <input type="text" name="ville_naissance" value="${form.ville_naissance || ''}">
                     </div>
                     <div class="form-group">
                         <label>Niveau diplôme</label>
-                        <input type="text" name="NiveauDiplome" value="${form.NiveauDiplome || ''}">
+                        <input type="text" name="niveau_diplome" value="${form.niveau_diplome || ''}">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" name="Mail" value="${form.Mail || ''}">
+                        <input type="email" name="mail" value="${form.mail || ''}">
                     </div>
                     <div class="form-group">
                         <label>Téléphone</label>
-                        <input type="tel" name="Telephone" value="${form.Telephone || ''}">
+                        <input type="tel" name="num_telephone" value="${form.num_telephone || ''}">
                     </div>
                     <div class="form-group">
                         <label>Adresse</label>
-                        <input type="text" name="Adresse" value="${form.Adresse || ''}">
+                        <input type="text" name="adresse" value="${form.adresse || ''}">
                     </div>
                     <div class="form-group">
                         <label>Complément</label>
-                        <input type="text" name="Complement" value="${form.Complement || ''}">
+                        <input type="text" name="complement" value="${form.complement || ''}">
                     </div>
                     <div class="form-group">
                         <label>Code postal</label>
-                        <input type="text" name="CodePostal" value="${form.CodePostal || ''}">
+                        <input type="text" name="code_postal" value="${form.code_postal || ''}">
                     </div>
                     <div class="form-group">
                         <label>Ville</label>
-                        <input type="text" name="Ville" value="${form.Ville || ''}">
+                        <input type="text" name="ville" value="${form.ville || ''}">
                     </div>
                     <div class="form-group">
                         <label>Pays</label>
-                        <input type="text" name="Pays" value="${form.Pays || ''}">
+                        <input type="text" name="pays" value="${form.pays || ''}">
                     </div>
                     <div class="form-group">
                         <label>N° Sécurité sociale</label>
-                        <input type="text" name="NumSecu" value="${form.NumSecu || ''}">
+                        <input type="text" name="num_secu_sociale" value="${form.num_secu_sociale || ''}">
                     </div>
                 </div>
                 <div class="modal-actions" style="margin-top: 20px; text-align: right;">
@@ -269,27 +282,32 @@ async function showFormDetail(id) {
 
         detailSection.style.display = 'block';
     } catch (err) {
-        alert('Erreur: ' + err.message);
+        showNotification('Erreur: ' + err.message, "error");
     }
 }
 
 async function updateForm() {
     const formElement = document.getElementById('editForm');
     const formData = new FormData(formElement);
-    const data = {};
-    
-    formData.forEach((value, key) => {
-        if (key === 'ID') {
-            data[key] = parseInt(value);
-        } else if (key === 'DateNaissance') {
-            data[key] = new Date(value).toISOString();
-        } else {
-            data[key] = value;
-        }
-    });
+    const data = {
+        id: parseInt(formData.get('id')),
+        nom: formData.get('nom'),
+        prenom: formData.get('prenom'),
+        date_naissance: new Date(formData.get('date_naissance')).toISOString(),
+        ville_naissance: formData.get('ville_naissance'),
+        niveau_diplome: formData.get('niveau_diplome'),
+        mail: formData.get('mail'),
+        num_telephone: formData.get('num_telephone'),
+        adresse: formData.get('adresse'),
+        complement: formData.get('complement'),
+        code_postal: formData.get('code_postal'),
+        ville: formData.get('ville'),
+        pays: formData.get('pays'),
+        num_secu_sociale: formData.get('num_secu_sociale')
+    };
 
     try {
-        const response = await fetch(`${API_URL}/form/update`, {
+        const response = await fetch(`${API_URL}/form/modify`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -302,11 +320,11 @@ async function updateForm() {
             throw new Error('Erreur lors de la mise à jour');
         }
 
-        alert('Formulaire mis à jour avec succès');
+        showNotification('Formulaire mis à jour avec succès', "info");
         closeDetail();
-        loadForms(); // Recharger la liste
+        loadForms();
     } catch (err) {
-        alert('Erreur: ' + err.message);
+        showNotification('Erreur: ' + err.message, "error");
     }
 }
 
@@ -321,10 +339,10 @@ async function deleteForm(id) {
             throw new Error('Erreur lors de la suppression');
         }
 
-        alert('Formulaire supprimé avec succès');
+        showNotification('Formulaire supprimé avec succès', "info");
         loadForms(); // Recharger la liste
     } catch (err) {
-        alert('Erreur: ' + err.message);
+        showNotification('Erreur: ' + err.message, "error");
     }
 }
 

@@ -89,15 +89,15 @@ function displayForms(forms) {
     forms.forEach(form => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${form.ID || form.id}</td>
-            <td>${form.Nom || ''}</td>
-            <td>${form.Prenom || ''}</td>
-            <td>${form.Mail || ''}</td>
-            <td>${form.Telephone || ''}</td>
-            <td>${formatDate(form.DateNaissance)}</td>
-            <td>${form.NiveauDiplome || ''}</td>
+            <td>${form.id}</td>
+            <td>${form.nom || ''}</td>
+            <td>${form.prenom || ''}</td>
+            <td>${form.mail || ''}</td>
+            <td>${form.num_telephone || ''}</td>
+            <td>${formatDate(form.date_naissance)}</td>
+            <td>${form.niveau_diplome || ''}</td>
             <td>
-                <button class="viewBtn" data-id="${form.ID || form.id}">Voir détails</button>
+                <button class="viewBtn" data-id="${form.id}">Voir détails</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -137,16 +137,16 @@ function applyFilters(globalSearchTerm = null) {
     filteredForms = allForms.filter(form => {
         // Filtre global (cherche dans tous les champs pertinents)
         const matchGlobal = !globalTerm || 
-            (form.Nom && form.Nom.toLowerCase().includes(globalTerm)) ||
-            (form.Prenom && form.Prenom.toLowerCase().includes(globalTerm)) ||
-            (form.Mail && form.Mail.toLowerCase().includes(globalTerm)) ||
-            (form.Telephone && form.Telephone.toLowerCase().includes(globalTerm));
+            (form.nom && form.nom.toLowerCase().includes(globalTerm)) ||
+            (form.prenom && form.prenom.toLowerCase().includes(globalTerm)) ||
+            (form.mail && form.mail.toLowerCase().includes(globalTerm)) ||
+            (form.num_telephone && form.num_telephone.toLowerCase().includes(globalTerm));
 
         // Filtres spécifiques
-        const matchName = !searchName || (form.Nom && form.Nom.toLowerCase().includes(searchName));
-        const matchSurname = !searchSurname || (form.Prenom && form.Prenom.toLowerCase().includes(searchSurname));
-        const matchEmail = !searchEmail || (form.Mail && form.Mail.toLowerCase().includes(searchEmail));
-        const matchPhone = !searchPhone || (form.Telephone && form.Telephone.toLowerCase().includes(searchPhone));
+        const matchName = !searchName || (form.nom && form.nom.toLowerCase().includes(searchName));
+        const matchSurname = !searchSurname || (form.prenom && form.prenom.toLowerCase().includes(searchSurname));
+        const matchEmail = !searchEmail || (form.mail && form.mail.toLowerCase().includes(searchEmail));
+        const matchPhone = !searchPhone || (form.num_telephone && form.num_telephone.toLowerCase().includes(searchPhone));
         
         return matchGlobal && matchName && matchSurname && matchEmail && matchPhone;
     });
@@ -182,20 +182,20 @@ async function showFormDetail(id) {
         
         detailContent.innerHTML = `
             <div class="detail-grid">
-                <div><strong>ID:</strong> ${form.ID || form.id}</div>
-                <div><strong>Nom:</strong> ${form.Nom || ''}</div>
-                <div><strong>Prénom:</strong> ${form.Prenom || ''}</div>
-                <div><strong>Date de naissance:</strong> ${formatDate(form.DateNaissance)}</div>
-                <div><strong>Ville de naissance:</strong> ${form.VilleNaissance || ''}</div>
-                <div><strong>Niveau diplôme:</strong> ${form.NiveauDiplome || ''}</div>
-                <div><strong>Email:</strong> ${form.Mail || ''}</div>
-                <div><strong>Téléphone:</strong> ${form.Telephone || ''}</div>
-                <div><strong>Adresse:</strong> ${form.Adresse || ''}</div>
-                <div><strong>Complément:</strong> ${form.Complement || ''}</div>
-                <div><strong>Code postal:</strong> ${form.CodePostal || ''}</div>
-                <div><strong>Ville:</strong> ${form.Ville || ''}</div>
-                <div><strong>Pays:</strong> ${form.Pays || ''}</div>
-                <div><strong>N° Sécurité sociale:</strong> ${form.NumSecu || ''}</div>
+                <div><strong>ID:</strong> ${form.id}</div>
+                <div><strong>Nom:</strong> ${form.nom || ''}</div>
+                <div><strong>Prénom:</strong> ${form.prenom || ''}</div>
+                <div><strong>Date de naissance:</strong> ${formatDate(form.date_naissance)}</div>
+                <div><strong>Ville de naissance:</strong> ${form.ville_naissance || ''}</div>
+                <div><strong>Niveau diplôme:</strong> ${form.niveau_diplome || ''}</div>
+                <div><strong>Email:</strong> ${form.mail || ''}</div>
+                <div><strong>Téléphone:</strong> ${form.num_telephone || ''}</div>
+                <div><strong>Adresse:</strong> ${form.adresse || ''}</div>
+                <div><strong>Complément:</strong> ${form.complement || ''}</div>
+                <div><strong>Code postal:</strong> ${form.code_postal || ''}</div>
+                <div><strong>Ville:</strong> ${form.ville || ''}</div>
+                <div><strong>Pays:</strong> ${form.pays || ''}</div>
+                <div><strong>N° Sécurité sociale:</strong> ${form.num_secu_sociale || ''}</div>
             </div>
         `;
 
