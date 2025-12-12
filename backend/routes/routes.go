@@ -30,7 +30,7 @@ func SetupRoutes(database *sql.DB) {
     http.HandleFunc("/api/users", middleware.RequireRole(database, []string{"admin"}, handlers.GetAllUsersHandler(database)))
 
     // déconnexion (le client n'a pas accès directement au token en JS)
-    // http.HandleFunc("/api/logout", handlers.LogoutHandler(database))
+    http.HandleFunc("/logout", handlers.LogoutHandler(database))
 
     // Routes publiques (pas de JWT)
     http.HandleFunc("/api/user/add", handlers.AjoutUser(database))
