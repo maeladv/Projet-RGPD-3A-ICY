@@ -5,7 +5,6 @@ let filteredForms = [];
 
 // Vérification de l'authentification au chargement
 document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
     loadForms();
     setupEventListeners();
 });
@@ -15,15 +14,6 @@ function setupEventListeners() {
     document.getElementById('applyFilters').addEventListener('click', applyFilters);
     document.getElementById('resetFilters').addEventListener('click', resetFilters);
     document.getElementById('closeDetail').addEventListener('click', closeDetail);
-}
-
-async function checkAuth() {
-    // Vérifie si l'utilisateur est connecté
-    const token = getCookie('jwt');
-    if (!token) {
-        window.location.href = '/login';
-        return;
-    }
 }
 
 function getCookie(name) {
