@@ -12,7 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setupEventListeners() {
     document.getElementById('logoutBtn').addEventListener('click', logout);
-    document.getElementById('applyFilters').addEventListener('click', applyFilters);
+    
+    // Toggle filters
+    document.getElementById('toggleFiltersBtn').addEventListener('click', () => {
+        const panel = document.getElementById('advancedFilters');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Global search
+    document.getElementById('globalSearch').addEventListener('input', (e) => {
+        applyFilters(e.target.value);
+    });
+
+    document.getElementById('reloadBtn').addEventListener('click', () => {
+        resetFilters();
+        loadForms();
+    });
+
+    document.getElementById('applyFilters').addEventListener('click', () => applyFilters());
     document.getElementById('resetFilters').addEventListener('click', resetFilters);
     document.getElementById('closeDetail').addEventListener('click', closeDetail);
 }
@@ -111,26 +128,49 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('fr-FR');
 }
 
-function applyFilters() {
+function applyFilters(globalSearchTerm = null) {
+    // Si globalSearchTerm est fourni, c'est une recherche rapide
+    // Sinon on prend les valeurs des champs
+    
+    let globalTerm = globalSearchTerm;
+    if (globalTerm === null) {
+        globalTerm = document.getElementById('globalSearch').value.toLowerCase();
+    } else {
+        globalTerm = globalTerm.toLowerCase();
+    }
+
     const searchName = document.getElementById('searchName').value.toLowerCase();
+    const searchSurname = document.getElementById('searchSurname').value.toLowerCase();
     const searchEmail = document.getElementById('searchEmail').value.toLowerCase();
+    const searchPhone = document.getElementById('searchPhone').value.toLowerCase();
 
     filteredForms = allForms.filter(form => {
-        const matchName = !searchName || 
-            (form.Nom && form.Nom.toLowerCase().includes(searchName)) ||
-            (form.Prenom && form.Prenom.toLowerCase().includes(searchName));
-        const matchEmail = !searchEmail || 
-            (form.Mail && form.Mail.toLowerCase().includes(searchEmail));
+        // Filtre global (cherche dans tous les champs pertinents)
+        const matchGlobal = !globalTerm || 
+            (form.Nom && form.Nom.toLowerCase().includes(globalTerm)) ||
+            (form.Prenom && form.Prenom.toLowerCase().includes(globalTerm)) ||
+            (form.Mail && form.Mail.toLowerCase().includes(globalTerm)) ||
+            (form.Telephone && form.Telephone.toLowerCase().includes(globalTerm));
+
+        // Filtres spécifiques
+        const matchName = !searchName || (form.Nom && form.Nom.toLowerCase().includes(searchName));
+        const matchSurname = !searchSurname || (form.Prenom && form.Prenom.toLowerCase().includes(searchSurname));
+        const matchEmail = !searchEmail || (form.Mail && form.Mail.toLowerCase().includes(searchEmail));
+        const matchPhone = !searchPhone || (form.Telephone && form.Telephone.toLowerCase().includes(searchPhone));
         
-        return matchName && matchEmail;
+        return matchGlobal && matchName && matchSurname && matchEmail && matchPhone;
     });
 
     displayForms(filteredForms);
 }
 
 function resetFilters() {
+    document.getElementById('globalSearch').value = '';
     document.getElementById('searchName').value = '';
+    document.getElementById('searchSurname').value = '';
     document.getElementById('searchEmail').value = '';
+    document.getElementById('searchPhone').value = '';
+    
     filteredForms = [...allForms];
     displayForms(filteredForms);
 }
