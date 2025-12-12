@@ -17,13 +17,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             errorDiv.textContent = err;
             errorDiv.style.display = 'block';
             return;
-        }
-        
-        const data = await response.json();
-        if (data.User.Role === 'admin') {
-            window.location.href = '/admin';
         } else {
-            window.location.href = '/rh';
+            window.location.href = '/gestion';
         }
     } catch (err) {
         errorDiv.textContent = 'Erreur de connexion';
