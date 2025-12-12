@@ -19,6 +19,8 @@ func SetupRoutes(database *sql.DB) {
     http.HandleFunc("/api/forms", middleware.RequireJWT(database, handlers.GetAllForms(database)))
     http.HandleFunc("/api/form", middleware.RequireJWT(database, handlers.GetForm(database)))
     http.HandleFunc("/api/form/add", middleware.RequireJWT(database, handlers.AjoutForm(database)))
+    http.HandleFunc("/api/form/delete", middleware.RequireJWT(database, handlers.SuppForm(database)))
+    http.HandleFunc("/api/form/modify", middleware.RequireJWT(database, handlers.ModifForm(database)))
     http.HandleFunc("/api/users", middleware.RequireJWT(database, handlers.GetAllUsersHandler(database)))
 
     // Routes publiques (pas de JWT)
