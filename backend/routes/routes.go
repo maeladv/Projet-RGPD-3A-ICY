@@ -30,9 +30,12 @@ func SetupRoutes(database *sql.DB) {
     http.HandleFunc("/api/forms", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.GetAllForms(database)))
     http.HandleFunc("/api/form", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.GetForm(database)))
     http.HandleFunc("/api/form/add", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.AjoutForm(database)))
-    http.HandleFunc("/api/form/delete", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.SuppForm(database)))
-    http.HandleFunc("/api/form/modify", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.ModifForm(database)))
+    
 
+
+    // Routes Admin
+    http.HandleFunc("/api/form/delete", middleware.RequireRole(database, []string{"admin"}, handlers.SuppForm(database)))
+    http.HandleFunc("/api/form/modify", middleware.RequireRole(database, []string{"admin"}, handlers.ModifForm(database)))
     http.HandleFunc("/api/users", middleware.RequireRole(database, []string{"admin"}, handlers.GetAllUsersHandler(database)))
 
     // déconnexion (le client n'a pas accès directement au token en JS)

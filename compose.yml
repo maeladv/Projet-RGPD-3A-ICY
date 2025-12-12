@@ -4,24 +4,46 @@ services:
     ports:
       - 2020:8080
     env_file:
-      - .env
+      - .env-db
+      - .env-sftp
+    volumes:
+      # (voir la partie sftp)
+      - ./sftp/keys/id_user_ed25519:/keys/id_ed25519
+      - ./sftp/keys/ssh_host_rsa_key.pub:/keys/ssh_host_rsa_key.pub
+      - ./sftp/keys/ssh_host_ed25519_key.pub:/keys/ssh_host_ed25519_key.pub
+      - ./front/static:/usr/share/nginx/html:ro
     networks:
       - db-network
+      - sftp-network
       - front-network
     depends_on:
       - db
-    volumes:
-      - ./front/static:/usr/share/nginx/html:ro
+      - sftp
+
   db:
-    image: postgres
+    image: postgres:18-alpine
     env_file:
-      - .env
+      - .env-db
     networks:
       - db-network
     volumes:
       - ./sql/postgres_data:/var/lib/postgresql
       - ./sql/init:/docker-entrypoint-initdb.d/
     restart: unless-stopped
+
+  sftp:
+    image: lscr.io/linuxserver/openssh-server
+    env_file:
+      - .env-sftp
+    networks:
+      - sftp-network
+    volumes:
+      - ./sftp/data/:/home/nobody/
+      - ./sftp/keys/id_user_ed25519.pub:/keys/id_ed25519.pub
+    restart: unless-stopped
+    ports:
+      - 2222:2222
+
   front:
     image: nginx:latest
     ports:
@@ -37,6 +59,7 @@ services:
 networks: 
   db-network:
     driver: bridge
-
+  sftp-network:
+    driver: bridge
   front-network:
     driver: bridge

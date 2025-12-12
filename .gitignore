@@ -1,3 +1,11 @@
 .vscode/
-.env
+
 postgres_data
+cv_upload
+
+.env*
+!.env-db.example
+!.env-sftp.example
+
+sftp/data/*
+sftp/keys/*
