@@ -21,7 +21,7 @@ async function checkAuth() {
     // Vérifie si l'utilisateur est connecté
     const token = getCookie('jwt');
     if (!token) {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
         return;
     }
 }
@@ -51,7 +51,7 @@ async function loadForms() {
 
         if (!response.ok) {
             if (response.status === 401) {
-                window.location.href = '/login.html';
+                window.location.href = '/login';
                 return;
             }
             throw new Error('Erreur lors du chargement des formulaires');
@@ -181,5 +181,5 @@ function closeDetail() {
 
 function logout() {
     document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    window.location.href = '/login.html';
+    window.location.href = '/login';
 }
