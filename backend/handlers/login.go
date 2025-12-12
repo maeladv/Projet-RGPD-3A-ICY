@@ -17,7 +17,7 @@ type loginRequest struct {
 
 type loginResponse struct {
     Token string      `json:"token"`
-    User  models.User `json:"user"`
+    User  models.User `json:"user"` // à supprimer
 }
 
 func LoginHandler(db *sql.DB) http.HandlerFunc {
