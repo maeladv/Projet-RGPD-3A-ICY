@@ -70,6 +70,7 @@ async function loadForms() {
         }
 
         allForms = await response.json();
+        if (!Array.isArray(allForms)) allForms = [];
         filteredForms = [...allForms];
         displayForms(filteredForms);
 
@@ -118,6 +119,9 @@ function showConfirmDialog(message, onConfirm) {
 }
 
 function displayForms(forms) {
+    if(!Array.isArray(forms)) {
+        forms = [];
+    }
     const tbody = document.getElementById('formsBody');
     tbody.innerHTML = '';
 
@@ -244,6 +248,7 @@ async function showFormDetail(id) {
                 <input type="hidden" name="id" value="${form.id}">
                 <div class="detail-grid">
                     <div class="form-group">
+            });
                         <label>Nom</label>
                         <input type="text" name="nom" value="${form.nom || ''}">
                     </div>
