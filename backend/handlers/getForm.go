@@ -12,13 +12,13 @@ func GetForm(db *sql.DB) http.HandlerFunc {
 		formID := r.URL.Query().Get("id")
 
 		var form models.Form
-		query := `SELECT id, nom, prenom, date_naissance, ville_naissance, niveau_diplome, 
+		query := `SELECT id, nom, prenom, date_naissance, ville_naissance, niveau_diplome, mail,	 
                   adresse, complement_adresse, code_postal, ville, pays, num_secu_sociale, num_telephone 
                   FROM answers WHERE id = $1`
 
 		err := db.QueryRow(query, formID).Scan(
 			&form.ID, &form.Nom, &form.Prenom, &form.DateNaissance,
-			&form.VilleNaissance, &form.NiveauDiplome, &form.Adresse,
+			&form.VilleNaissance, &form.NiveauDiplome, &form.Mail, &form.Adresse,
 			&form.Complement, &form.CodePostal, &form.Ville, &form.Pays,
 			&form.NumSecu, &form.Telephone,
 		)
@@ -39,7 +39,7 @@ func GetForm(db *sql.DB) http.HandlerFunc {
 
 func GetAllForms(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		query := `SELECT id, nom, prenom, date_naissance, ville_naissance, niveau_diplome,
+		query := `SELECT id, nom, prenom, date_naissance, ville_naissance, niveau_diplome, mail,
                   adresse, complement_adresse, code_postal, ville, pays, num_secu_sociale, num_telephone 
                   FROM answers`
 
@@ -55,7 +55,7 @@ func GetAllForms(db *sql.DB) http.HandlerFunc {
 			var form models.Form
 			if err := rows.Scan(
 				&form.ID, &form.Nom, &form.Prenom, &form.DateNaissance,
-				&form.VilleNaissance, &form.NiveauDiplome, &form.Adresse,
+				&form.VilleNaissance, &form.NiveauDiplome, &form.Mail, &form.Adresse,
 				&form.Complement, &form.CodePostal, &form.Ville, &form.Pays,
 				&form.NumSecu, &form.Telephone,
 			); err != nil {
