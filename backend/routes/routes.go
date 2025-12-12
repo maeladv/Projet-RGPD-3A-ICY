@@ -14,6 +14,9 @@ func SetupRoutes(database *sql.DB) {
     }))
 
     // Routes Admin
+    	http.HandleFunc("/admin", middleware.RequireRole(database, []string{"admin"}, func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, "/usr/share/nginx/html/pages/admin.html")
+    }))
 
 	// Routes protégées (nécessitent JWT)
     http.HandleFunc("/api/forms", middleware.RequireJWT(database, handlers.GetAllForms(database)))
