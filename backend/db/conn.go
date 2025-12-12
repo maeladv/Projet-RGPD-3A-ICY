@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 func InitDB(host, port, user, password, dbname, sslmode string) (*sql.DB, error) {
@@ -21,7 +23,7 @@ func InitDB(host, port, user, password, dbname, sslmode string) (*sql.DB, error)
 	for i := range maxRetries {
 		db, err = sql.Open("postgres", psqlInfo)
 		if err != nil {
-			log.Printf("[!] Tentative %d/%d: erreur lors de l'ouverture: %v", i+1, maxRetries, err)
+			log.Printf("[!] Tentative %d/%d: erreur lors de la connection à PostgreSQL: %v", i+1, maxRetries, err)
 			time.Sleep(2 * time.Second)
 			continue
 		}
@@ -32,7 +34,7 @@ func InitDB(host, port, user, password, dbname, sslmode string) (*sql.DB, error)
 			return db, nil
 		}
 
-		log.Printf("[!] Tentative %d/%d: erreur ping: %v", i+1, maxRetries, err)
+		log.Printf("[!] Tentative %d/%d: erreur ping PostgreSQL: %v", i+1, maxRetries, err)
 		db.Close()
 		time.Sleep(2 * time.Second)
 	}

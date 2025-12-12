@@ -4,9 +4,12 @@ import (
 	"backend/db"
 	"backend/handlers"
 	"backend/sftp"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+
+	"golang.org/x/crypto/ssh"
 )
 
 func main() {
@@ -24,9 +27,16 @@ func main() {
 
 	hostSFTP := "sftp"
 	portSFTP := "22"
+	privateKey, err := loadPrivateKey("/keys/id_ed25519")
+	if err != nil {
+		log.Fatal(err)
+	}
+	hostKey, err := loadPublicKey("/keys/ssh_host_rsa_key.pub")
+	if err != nil {
+		log.Fatal(err)
+	}
 	usernameSFTP := os.Getenv("SFTP_USERNAME")
-	passwordSFTP := os.Getenv("SFTP_PASSWORD")
-	sftp, err := sftp.InitSFTP(hostSFTP, portSFTP, usernameSFTP, passwordSFTP)
+	sftp, err := sftp.InitSFTP(hostSFTP, portSFTP, usernameSFTP, privateKey, hostKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,4 +48,32 @@ func main() {
 
 	log.Println("Serveur démarré sur le port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func loadPrivateKey(path string) (*ssh.Signer, error) {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("[!] echec de la lecture de la clé privée (%s): %v", path, err)
+	}
+
+	privateKey, err := ssh.ParsePrivateKey(content)
+	if err != nil {
+		return nil, fmt.Errorf("[!] echec du parsing de la clé privée: %v", err)
+	}
+
+	return &privateKey, nil
+}
+
+func loadPublicKey(path string) (*ssh.PublicKey, error) {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("[!] echec de la lecture de la clé publique (%s): %v", path, err)
+	}
+
+	publicKey, _, _, _, err := ssh.ParseAuthorizedKey(content)
+	if err != nil {
+		return nil, fmt.Errorf("[!] echec du parsing de la clé publique: %v", err)
+	}
+
+	return &publicKey, nil
 }

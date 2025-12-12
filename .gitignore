@@ -5,3 +5,5 @@ cv_upload
 .env*
 !.env-db.example
 !.env-sftp.example
+ssh_host*
+id_*

@@ -6,8 +6,14 @@ services:
     env_file:
       - .env-db
       - .env-sftp
+    volumes:
+      # (voir la partie sftp)
+      - ./sftp/keys/id_user_ed25519:/keys/id_ed25519
+      - ./sftp/keys/ssh_host_rsa_key.pub:/keys/ssh_host_rsa_key.pub
+      - ./sftp/keys/ssh_host_ed25519_key.pub:/keys/ssh_host_ed25519_key.pub
     networks:
       - db-network
+      - sftp-network
     depends_on:
       - db
       - sftp
@@ -25,12 +31,25 @@ services:
 
   sftp:
     image: atmoz/sftp
+    ports:
+      - 22:22
     networks:
         - sftp-network
     env_file:
       - .env-sftp
     volumes:
-      - ./sftp/:/uploads
+      # l'username est fixe, peut être qu'il y a moyen de mieux faire mais c'est pas la priorité actuellement
+      - ./sftp/data/:/home/nobody/uploads
+
+      # pour fixer la clé hôte du docker sftp
+      # run (https://hub.docker.com/r/atmoz/sftp/) :
+      # ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key < /dev/null
+      # ssh-keygen -t ed25519 -f ssh_host_ed25519_key < /dev/null
+      - ./sftp/keys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+      - ./sftp/keys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+
+      # pour permettre la connection par clé
+      - ./sftp/keys/id_user_ed25519.pub:/home/nobody/.ssh/keys/id_ed25519.pub:ro
     restart: unless-stopped
 
 networks: 
