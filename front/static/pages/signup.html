@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer un utilisateur</title>
+    <link rel="stylesheet" href="/static/css/signup/signup.css">
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Créer un utilisateur</h2>
+        <form id="signupForm">
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="role">Rôle</label>
+            <select id="role" name="role" required>
+                <option value="user">Utilisateur</option>
+                <option value="rh">RH</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <button type="submit">Créer</button>
+        </form>
+        <div id="signupMessage"></div>
+    </div>
+    <script src="../../script/signup/signup.js"></script>
+</body>
+</html>
