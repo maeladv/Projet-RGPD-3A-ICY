@@ -5,7 +5,10 @@ let filteredForms = [];
 
 // Vérification de l'authentification au chargement
 document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
+    if (!getCookie('jwt')) {
+        window.location.href = '/login';
+        return;
+    }
     loadForms();
     setupEventListeners();
 });
@@ -34,15 +37,6 @@ function setupEventListeners() {
     document.getElementById('closeDetail').addEventListener('click', closeDetail);
 }
 
-async function checkAuth() {
-    // Vérifie si l'utilisateur est connecté
-    const token = getCookie('jwt');
-    if (!token) {
-        window.location.href = '/login.html';
-        return;
-    }
-}
-
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -68,7 +62,7 @@ async function loadForms() {
 
         if (!response.ok) {
             if (response.status === 401) {
-                window.location.href = '/login.html';
+                window.location.href = '/login';
                 return;
             }
             throw new Error('Erreur lors du chargement des formulaires');
@@ -221,5 +215,5 @@ function closeDetail() {
 
 function logout() {
     document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    window.location.href = '/login.html';
+    window.location.href = '/login';
 }
