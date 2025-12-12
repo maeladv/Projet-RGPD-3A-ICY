@@ -29,12 +29,12 @@ func RequireJWT(db *sql.DB, next http.HandlerFunc) http.HandlerFunc {
         }
 
         if token == "" {
-            http.Error(w, "Non autorisé", http.StatusUnauthorized)
+            http.Redirect(w, r, "/login", http.StatusFound)
             return
         }
         claims, err := auth.ParseJWT(token)
         if err != nil {
-            http.Error(w, "Token invalide", http.StatusUnauthorized)
+            http.Redirect(w, r, "/login", http.StatusFound)
             return
         }
         // Option: vérifier que l’utilisateur existe toujours
