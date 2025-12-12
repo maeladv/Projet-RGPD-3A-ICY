@@ -10,7 +10,7 @@ import (
 func SetupRoutes(database *sql.DB) {
 	// Routes RH et admin
 	http.HandleFunc("/rh", middleware.RequireRole(database, []string{"rh", "admin"}, func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, "front/static/pages/rh.html")
+        http.ServeFile(w, r, "/usr/share/nginx/html/pages/rh.html")
     }))
 
     // Routes Admin
