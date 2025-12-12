@@ -2,7 +2,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - 80:8080
+      - 2020:8080
     env_file:
       - .env-db
       - .env-sftp
@@ -11,9 +11,11 @@ services:
       - ./sftp/keys/id_user_ed25519:/keys/id_ed25519
       - ./sftp/keys/ssh_host_rsa_key.pub:/keys/ssh_host_rsa_key.pub
       - ./sftp/keys/ssh_host_ed25519_key.pub:/keys/ssh_host_ed25519_key.pub
+      - ./front/static:/usr/share/nginx/html:ro
     networks:
       - db-network
       - sftp-network
+      - front-network
     depends_on:
       - db
       - sftp
@@ -42,8 +44,22 @@ services:
     ports:
       - 2222:2222
 
+  front:
+    image: nginx:latest
+    ports:
+      - 80:80
+    networks:
+      - front-network
+    volumes:
+      - ./front/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./front/static:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+
 networks: 
   db-network:
     driver: bridge
   sftp-network:
+    driver: bridge
+  front-network:
     driver: bridge

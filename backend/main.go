@@ -1,8 +1,9 @@
 package main
 
 import (
+	"backend/auth"
 	"backend/db"
-	"backend/handlers"
+	"backend/routes"
 	"backend/sftp"
 	"fmt"
 	"log"
@@ -13,11 +14,13 @@ import (
 )
 
 func main() {
+	auth.InitJWTSecret()
+
 	hostDB := "db"
 	portDB := "5432"
 	userDB := os.Getenv("POSTGRES_USER")
 	passDB := os.Getenv("POSTGRES_PASSWORD")
-	nameDB := "postgres"
+	nameDB := userDB
 	sslmodeDB := "disable"
 	database, err := db.InitDB(hostDB, portDB, userDB, passDB, nameDB, sslmodeDB)
 	if err != nil {
@@ -38,9 +41,7 @@ func main() {
 	}
 	defer sftp.Close()
 
-	http.HandleFunc("/api/forms", handlers.GetAllForms(database))
-	http.HandleFunc("/api/form", handlers.GetForm(database))
-	http.HandleFunc("/api/form/add", handlers.AjoutForm(database))
+	routes.SetupRoutes(database)
 
 	log.Println("Serveur démarré sur le port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
