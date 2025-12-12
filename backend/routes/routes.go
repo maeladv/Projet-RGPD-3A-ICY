@@ -19,7 +19,11 @@ func SetupRoutes(database *sql.DB) {
     http.HandleFunc("/api/form/modify", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.ModifForm(database)))
 
     // Routes Admin
+
     http.HandleFunc("/api/users", middleware.RequireRole(database, []string{"admin"}, handlers.GetAllUsersHandler(database)))
+    http.HandleFunc("/admin", middleware.RequireRole(database, []string{"admin"}, func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, "/usr/share/nginx/html/pages/admin.html")
+    }))
 
 
     // Routes publiques (pas de JWT)
