@@ -4,7 +4,6 @@ import (
 	"backend/models"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -110,9 +109,9 @@ func AjoutForm(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		for i := 0; i < f.NumField(); i++ {
-			fmt.Printf("Field: %s\tValue: %v\n", typeOfS.Field(i).Name, v.Field(i).Interface())
-		}
+		// for i := 0; i < f.NumField(); i++ {
+		// 	fmt.Printf("Field: %s\tValue: %v\n", typeOfS.Field(i).Name, v.Field(i).Interface())
+		// }
 		if f.Nom == "" {
 			http.Error(w, "Nom requis", http.StatusBadRequest)
 			return
