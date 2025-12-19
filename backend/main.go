@@ -16,6 +16,8 @@ import (
 func main() {
 	auth.InitJWTSecret()
 
+	/*---[Connection Database]---*/
+
 	hostDB := "db"
 	portDB := "5432"
 	userDB := os.Getenv("POSTGRES_USER")
@@ -28,20 +30,23 @@ func main() {
 	}
 	defer database.Close()
 
-	hostSFTP := "sftp"
-	portSFTP := "2222"
+	/*---[Connection SFTP]---*/
+
+	hostSFTP := "sftp:2222"
+	usernameSFTP := os.Getenv("USER_NAME")
 	privateKey, err := loadPrivateKey("/keys/id_ed25519")
 	if err != nil {
 		log.Fatal(err)
 	}
-	usernameSFTP := os.Getenv("USER_NAME")
-	sftp, err := sftp.InitSFTP(hostSFTP, portSFTP, usernameSFTP, privateKey)
+	sftp, err := sftp.InitSFTP(hostSFTP, usernameSFTP, privateKey)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer sftp.Close()
 
-	routes.SetupRoutes(database)
+	/*---[Routing]---*/
+
+	routes.SetupRoutes(database, sftp)
 
 	log.Println("Serveur démarré sur le port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -59,18 +64,4 @@ func loadPrivateKey(path string) (*ssh.Signer, error) {
 	}
 
 	return &privateKey, nil
-}
-
-func loadPublicKey(path string) (*ssh.PublicKey, error) {
-	content, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("[!] echec de la lecture de la clé publique (%s): %v", path, err)
-	}
-
-	publicKey, _, _, _, err := ssh.ParseAuthorizedKey(content)
-	if err != nil {
-		return nil, fmt.Errorf("[!] echec du parsing de la clé publique: %v", err)
-	}
-
-	return &publicKey, nil
 }

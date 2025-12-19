@@ -4,16 +4,21 @@ import (
 	"backend/models"
 	"database/sql"
 	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/pkg/sftp"
 )
 
 var mailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
-func AjoutForm(db *sql.DB) http.HandlerFunc {
+func AjoutForm(db *sql.DB, sftp *sftp.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
@@ -53,6 +58,29 @@ func AjoutForm(db *sql.DB) http.HandlerFunc {
 				f.DateNaissance = parsedDate
 			}
 
+			cv, _, err := r.FormFile("cv")
+			if err != nil && err != http.ErrMissingFile {
+				http.Error(w, "Erreur lors du parsing du cv", http.StatusBadRequest)
+				return
+			} else if err == nil {
+				defer cv.Close()
+
+				f.CvPath = uuid.NewString() + ".pdf"
+
+				remoteCv, err := sftp.Create("/data" + f.CvPath)
+				if err != nil {
+					fmt.Printf("erreur : %s\n", err)
+					http.Error(w, "Erreur lors de la sauvegarde du cv", http.StatusInternalServerError)
+					return
+				}
+				defer remoteCv.Close()
+
+				_, err = io.Copy(remoteCv, cv)
+				if err != nil {
+					http.Error(w, "Erreur lors de la sauvegarde du cv", http.StatusInternalServerError)
+					return
+				}
+			}
 		} else if strings.Contains(contentType, "application/json") {
 			var data map[string]any
 			if err := json.NewDecoder(r.Body).Decode(&data); err != nil {

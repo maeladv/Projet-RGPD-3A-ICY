@@ -19,6 +19,7 @@ type Form struct {
 	Pays           string    `json:"pays"`
 	NumSecu        string    `json:"num_secu_sociale"`
 	Telephone      string    `json:"num_telephone"`
+	CvPath         string    `json:"cv_path`
 }
 
 type User struct {

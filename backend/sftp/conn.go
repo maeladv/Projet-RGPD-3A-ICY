@@ -10,10 +10,8 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-func InitSFTP(host, port, username string, userPrivateKey *ssh.Signer) (*sftp.Client, error) {
-	addr := fmt.Sprintf("%s:%s", host, port)
-
-	log.Printf("[i] Tentative de connexion à SFTP: host=%s port=%s user=%s\n", host, port, username)
+func InitSFTP(host, username string, userPrivateKey *ssh.Signer) (*sftp.Client, error) {
+	log.Printf("[i] Tentative de connexion à SFTP: host=%s user=%s\n", host, username)
 
 	var auths []ssh.AuthMethod
 	auths = append(auths, ssh.PublicKeys(*userPrivateKey))
@@ -28,7 +26,7 @@ func InitSFTP(host, port, username string, userPrivateKey *ssh.Signer) (*sftp.Cl
 	var err error
 
 	for attempt := 1; attempt <= 10; attempt++ {
-		sshClient, err = ssh.Dial("tcp", addr, sshConfig)
+		sshClient, err = ssh.Dial("tcp", host, sshConfig)
 		if err == nil {
 			break
 		}
@@ -39,7 +37,7 @@ func InitSFTP(host, port, username string, userPrivateKey *ssh.Signer) (*sftp.Cl
 		}
 	}
 	if err != nil {
-		return nil, fmt.Errorf("[!] impossible de créer la connection ssh avec %s : %v", addr, err)
+		return nil, fmt.Errorf("[!] impossible de créer la connection ssh avec %s : %v", host, err)
 	}
 
 	sftpClient, err := sftp.NewClient(sshClient)
