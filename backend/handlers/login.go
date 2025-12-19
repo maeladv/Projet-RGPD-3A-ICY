@@ -16,8 +16,7 @@ type loginRequest struct {
 }
 
 type loginResponse struct {
-	Token string      `json:"token"`
-	User  models.User `json:"user"`
+    Token string      `json:"token"`
 }
 
 func LoginHandler(db *sql.DB) http.HandlerFunc {
@@ -80,3 +79,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(loginResponse{Token: token})
+    }
+}

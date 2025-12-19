@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page non trouvée - Medicaire</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--sky-blue), var(--lavender));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            line-height: 1;
+            filter: drop-shadow(0 10px 20px rgba(42, 127, 224, 0.2));
+        }
+        .error-title {
+            font-size: 28px;
+            color: var(--deep-blue);
+            margin: 20px 0 16px;
+        }
+        .error-text {
+            color: rgba(11, 17, 44, 0.65);
+            margin-bottom: 32px;
+            font-size: 16px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+        .illustration-404 {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(252, 191, 73, 0.2), rgba(255, 255, 255, 0));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand">Medicaire</div>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/login">Espace RH</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="card">
+            <div class="error-container">
+                <div class="illustration-404">🤔</div>
+                <h1 class="error-code">404</h1>
+                <h2 class="error-title">Page introuvable</h2>
+                <p class="error-text">Désolé, la page que vous recherchez n'existe pas ou a été déplacée.</p>
+                <a href="/" class="button primary">Retourner au formulaire</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© 2025 Medicaire. Données collectées pour la candidature en respect du RGPD.</p>
+    </footer>
+</body>
+</html>
