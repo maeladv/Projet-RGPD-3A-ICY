@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -35,7 +36,7 @@ func AjoutUser(db *sql.DB) http.HandlerFunc {
 		if err != nil {
 			http.Error(w, "Erreur lors du hash du mot de passe", http.StatusInternalServerError)
 			return
-}
+		}
 
 		existingUser, err := GetUserByUsername(db, u.Username)
 		if err != nil && err != sql.ErrNoRows {
@@ -56,3 +57,4 @@ func AjoutUser(db *sql.DB) http.HandlerFunc {
 		w.Write([]byte("Utilisateur créé avec succès"))
 	}
 }
+

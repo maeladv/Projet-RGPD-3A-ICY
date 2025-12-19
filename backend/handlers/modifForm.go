@@ -40,3 +40,4 @@ func ModifForm(db *sql.DB) http.HandlerFunc {
 		w.Write([]byte("Formulaire mis à jour avec succès"))
 	}
 }
+

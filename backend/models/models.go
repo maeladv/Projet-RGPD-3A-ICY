@@ -34,4 +34,3 @@ type Session struct {
 	Token     string
 	ExpiresAt time.Time
 }
-

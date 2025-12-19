@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-)	
+)
 
 func GetUserByUsername(db *sql.DB, username string) (*models.User, error) {
 	var u models.User
@@ -49,35 +49,36 @@ func GetAllUsers(db *sql.DB) ([]models.User, error) {
 // HANDLERS HTTP
 
 func GetAllUsersHandler(db *sql.DB) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        users, err := GetAllUsers(db)
-        if err != nil {
-            http.Error(w, "Erreur lors de la récupération des utilisateurs", http.StatusInternalServerError)
-            return
-        }
-        w.Header().Set("Content-Type", "application/json")
-        json.NewEncoder(w).Encode(users)
-    }
+	return func(w http.ResponseWriter, r *http.Request) {
+		users, err := GetAllUsers(db)
+		if err != nil {
+			http.Error(w, "Erreur lors de la récupération des utilisateurs", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(users)
+	}
 }
 
 func GetUserByIDHandler(db *sql.DB) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        idStr := r.URL.Query().Get("id")
-        if idStr == "" {
-            http.Error(w, "ID manquant", http.StatusBadRequest)
-            return
-        }
-        id, err := strconv.Atoi(idStr)
-        if err != nil {
-            http.Error(w, "ID invalide", http.StatusBadRequest)
-            return
-        }
-        user, err := GetUserByID(db, id)
-        if err != nil {
-            http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
-            return
-        }
-        w.Header().Set("Content-Type", "application/json")
-        json.NewEncoder(w).Encode(user)
-    }
+	return func(w http.ResponseWriter, r *http.Request) {
+		idStr := r.URL.Query().Get("id")
+		if idStr == "" {
+			http.Error(w, "ID manquant", http.StatusBadRequest)
+			return
+		}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "ID invalide", http.StatusBadRequest)
+			return
+		}
+		user, err := GetUserByID(db, id)
+		if err != nil {
+			http.Error(w, "Utilisateur non trouvé", http.StatusNotFound)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
+	}
 }
+

@@ -50,4 +50,3 @@ func ParseJWT(tokenStr string) (*Claims, error) {
 	}
 	return nil, jwt.ErrTokenInvalidClaims
 }
-

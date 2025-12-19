@@ -32,3 +32,4 @@ func SuppForm(db *sql.DB) http.HandlerFunc {
 		w.Write([]byte("Formulaire supprimé avec succès"))
 	}
 }
+
