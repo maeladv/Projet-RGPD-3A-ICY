@@ -29,7 +29,9 @@ func SetupRoutes(database *sql.DB) {
     //  Routes API
     http.HandleFunc("/api/forms", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.GetAllForms(database)))
     http.HandleFunc("/api/form", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.GetForm(database)))
-    http.HandleFunc("/api/form/add", middleware.RequireRole(database, []string{"rh", "admin"}, handlers.AjoutForm(database)))
+    
+    // Ouvert à tous
+    http.HandleFunc("/api/form/add", handlers.AjoutForm(database))
     
 
 
