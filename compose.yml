@@ -1,8 +1,6 @@
 services:
   backend:
     build: ./backend
-    ports:
-      - 2020:8080
     env_file:
       - .env-db
       - .env-sftp
@@ -39,8 +37,6 @@ services:
       - ./sftp/data/:/home/nobody/
       - ./sftp/keys/id_user_ed25519.pub:/keys/id_ed25519.pub:ro
     restart: unless-stopped
-    ports:
-      - 2222:2222
 
   front:
     image: nginx:latest
