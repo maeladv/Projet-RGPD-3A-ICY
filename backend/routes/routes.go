@@ -45,6 +45,6 @@ func SetupRoutes(database *sql.DB) {
     http.HandleFunc("/api/logout", handlers.LogoutHandler(database))
 
     // Routes publiques (pas de JWT)
-    http.HandleFunc("/api/user/add", handlers.AjoutUser(database))
+    // http.HandleFunc("/api/user/add", handlers.AjoutUser(database)) on desactive la création d'utilisateur en prod
     http.HandleFunc("/api/login", handlers.LoginHandler(database))
 }
