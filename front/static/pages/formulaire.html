@@ -28,7 +28,7 @@
                 </div>
             </div>
         </header>
-        <form id="rgpdForm" action="http://localhost/api/form/add" method="POST" enctype="multipart/form-data" accept-charset="UTF-8" novalidate>
+        <form id="rgpdForm" action="https://projet-rgpd.insash.org/api/form/add" method="POST" enctype="multipart/form-data" accept-charset="UTF-8" novalidate>
             <div class="grid">
                 <div>
                     <label for="nom">Nom<span class="req">*</span></label>
@@ -254,6 +254,8 @@
     </style>
 
     <script>
+        var domain = "projet-rgpd.insash.org";
+
         (function(){
             const form = document.getElementById('rgpdForm');
             const cvInput = document.getElementById('cv');
@@ -375,7 +377,7 @@
                 // Soumission via AJAX
                 try {
                     const formData = new FormData(form);
-                    const response = await fetch('http://localhost/api/form/add', {
+                    const response = await fetch('https://' + domain + '/api/form/add', {
                         method: 'POST',
                         body: formData
                     });
